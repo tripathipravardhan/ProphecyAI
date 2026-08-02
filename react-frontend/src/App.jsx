@@ -4,14 +4,20 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { LayoutDashboard, Search, Map, BarChart2, Activity, Shield, Settings, HelpCircle, Bell, Home, TrendingUp, Target, Train, Cpu, CheckCircle2, TreePine, Droplets, Sliders, Database, Send, Check } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import './App.css';
-
+import L from 'leaflet';
+const customPinIcon = new L.Icon({
+  iconUrl: '/custom-pin.jpeg', // Added the .jpeg extension here
+  iconSize: [35, 35],
+  iconAnchor: [17, 35],
+  popupAnchor: [0, -35]
+});
 function LocationMarker({ position, setPosition }) {
   useMapEvents({
     click(e) {
       setPosition(e.latlng);
     },
   });
-  return position === null ? null : <Marker position={position}></Marker>;
+  return position === null ? null : <Marker position={position} icon={customPinIcon}></Marker>;
 }
 
 function MapUpdater({ centerPosition }) {
@@ -114,11 +120,12 @@ function App() {
     }
   };
 
+ // EXACT GOOGLE ACCOUNT CHOOSER LOGIN SCREEN
   // EXACT GOOGLE ACCOUNT CHOOSER LOGIN SCREEN
   if (!isAuthenticated) {
     return (
-      <div style={{ height: '100vh', width: '100vw', backgroundColor: '#131314', display: 'flex', justifyContent: 'center', alignItems: 'center', fontFamily: 'Roboto, sans-serif' }}>
-        <div style={{ backgroundColor: '#1e1f20', padding: '40px', borderRadius: '12px', width: '450px', boxShadow: '0 4px 24px rgba(0,0,0,0.5)', color: '#e3e3e3' }}>
+      <div className="app-container" style={{ height: '100vh', width: '100vw', backgroundColor: '#131314', display: 'flex', justifyContent: 'center', alignItems: 'center', fontFamily: 'Roboto, sans-serif' }}>
+        <div style={{ backgroundColor: '#1e1f20', padding: '40px', borderRadius: '12px', width: '450px', maxWidth: '90%', boxShadow: '0 4px 24px rgba(0,0,0,0.5)', color: '#e3e3e3' }}>
           
           <div style={{ marginBottom: '25px' }}>
             <svg width="24" height="24" viewBox="0 0 24 24" style={{ marginBottom: '15px' }}><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.3 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/><path fill="#FBBC05" d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.7s.2-2 .4-2.7L1.6 6.4C.6 8.4 0 10.6 0 13s.6 4.6 1.6 6.6l3.7-2.9z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.3L1.6 15c1.9 3.8 5.8 8 10.4 8z"/></svg>
@@ -178,12 +185,12 @@ function App() {
   }
 
   return (
-    <div className="dashboard-layout">
+    <div className="app-container dashboard-layout">
       {/* SIDEBAR */}
       <div className="sidebar">
         <div className="logo-container">
           <Activity color="#2563eb" size={28} />
-          ProphecyAI
+          ProphecyAI  
         </div>
         <div className="nav-menu">
           <div className={`nav-item ${activeTab === 'Dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('Dashboard')}><LayoutDashboard size={20} /> Dashboard</div>
@@ -198,6 +205,32 @@ function App() {
           </div>
         </div>
       </div>
+      {/* MAIN CONTENT AREA */}
+      <div className="main-content">
+        <div className="topbar">
+          <form onSubmit={handleMapSearch} style={{ display: 'flex', width: '350px' }}>
+            <input 
+              type="text" 
+              className="search-bar" 
+              value={topBarQuery}
+              onChange={(e) => setTopBarQuery(e.target.value)}
+              placeholder="Search locality, city or project..." 
+              style={{ width: '100%' }}
+            />
+          </form>
+
+          <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+            <span style={{ color: 'var(--text-muted)' }}>📍 India </span>
+            <Bell size={20} color="var(--text-muted)" />
+            
+            <div title={userEmail} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+              <div style={{ width: '35px', height: '35px', borderRadius: '50%', backgroundColor: '#2563eb', display: 'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold', color: 'white' }}>
+                {userEmail ? userEmail.charAt(0).toUpperCase() : 'U'}
+              </div>
+              <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{userEmail}</span>
+            </div>
+          </div>
+        </div>
 
       {/* MAIN CONTENT AREA */}
       <div className="main-content">
