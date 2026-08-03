@@ -5,14 +5,12 @@ import { LayoutDashboard, Search, Map, BarChart2, Activity, Shield, Settings, He
 import 'leaflet/dist/leaflet.css';
 import './App.css';
 import L from 'leaflet';
-
 const customPinIcon = new L.Icon({
-  iconUrl: '/custom-pin.jpeg',
+  iconUrl: '/custom-pin.jpeg', // Added the .jpeg extension here
   iconSize: [35, 35],
   iconAnchor: [17, 35],
   popupAnchor: [0, -35]
 });
-
 function LocationMarker({ position, setPosition }) {
   useMapEvents({
     click(e) {
@@ -122,6 +120,7 @@ function App() {
     }
   };
 
+ // EXACT GOOGLE ACCOUNT CHOOSER LOGIN SCREEN
   // EXACT GOOGLE ACCOUNT CHOOSER LOGIN SCREEN
   if (!isAuthenticated) {
     return (
@@ -206,6 +205,34 @@ function App() {
           </div>
         </div>
       </div>
+      
+      </div>
+      {/* MAIN CONTENT AREA */}
+      <div className="main-content">
+        <div className="topbar">
+          <form onSubmit={handleMapSearch} style={{ display: 'flex', width: '350px' }}>
+            <input 
+              type="text" 
+              className="search-bar" 
+              value={topBarQuery}
+              onChange={(e) => setTopBarQuery(e.target.value)}
+              placeholder="Search locality, city or project..." 
+              style={{ width: '100%' }}
+            />
+          </form>
+
+          <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+            <span style={{ color: 'var(--text-muted)' }}>📍 India </span>
+            <Bell size={20} color="var(--text-muted)" />
+            
+            <div title={userEmail} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+              <div style={{ width: '35px', height: '35px', borderRadius: '50%', backgroundColor: '#2563eb', display: 'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold', color: 'white' }}>
+                {userEmail ? userEmail.charAt(0).toUpperCase() : 'U'}
+              </div>
+              <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{userEmail}</span>
+            </div>
+          </div>
+        </div>
 
       {/* MAIN CONTENT AREA */}
       <div className="main-content">
@@ -712,6 +739,6 @@ function App() {
       </div>
     </div>
   );
-}
+  }
 
 export default App;
