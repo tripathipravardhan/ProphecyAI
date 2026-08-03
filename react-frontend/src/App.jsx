@@ -186,12 +186,14 @@ function App() {
 
   return (
     <div className="app-container dashboard-layout" style={{ display: 'flex', height: '100vh', width: '100vw', overflow: 'hidden' }}>
+      return (
+    <div className="app-container dashboard-layout" style={{ display: 'flex', height: '100vh', width: '100vw', overflow: 'hidden' }}>
+      
       {/* SIDEBAR */}
-
-      <div className="sidebar" style={{ flexShrink: 0, overflowY: 'auto' }}>
+      <div className="sidebar" style={{ flexShrink: 0, overflowY: 'auto', zIndex: 10 }}>
         <div className="logo-container">
           <Activity color="#2563eb" size={28} />
-          ProphecyAI
+          ProphecyAI  
         </div>
         <div className="nav-menu">
           <div className={`nav-item ${activeTab === 'Dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('Dashboard')}><LayoutDashboard size={20} /> Dashboard</div>
@@ -200,15 +202,15 @@ function App() {
           <div className={`nav-item ${activeTab === 'Satellite Analysis' ? 'active' : ''}`} onClick={() => setActiveTab('Satellite Analysis')}><Map size={20} /> Satellite Analysis</div>
           <div className={`nav-item ${activeTab === 'Investment Insights' ? 'active' : ''}`} onClick={() => setActiveTab('Investment Insights')}><TrendingUp size={20} /> Investment Insights</div>
           <div className={`nav-item ${activeTab === 'Risk Reports' ? 'active' : ''}`} onClick={() => setActiveTab('Risk Reports')}><Shield size={20} /> Risk Reports</div>
-          <div style={{ marginTop: 'auto' }}>
+          <div style={{marginTop: 'auto'}}>
             <div className={`nav-item ${activeTab === 'Settings' ? 'active' : ''}`} onClick={() => setActiveTab('Settings')}><Settings size={20} /> Settings</div>
             <div className={`nav-item ${activeTab === 'Help & Support' ? 'active' : ''}`} onClick={() => setActiveTab('Help & Support')}><HelpCircle size={20} /> Help & Support</div>
           </div>
         </div>
       </div>
-
+      
       {/* MAIN CONTENT AREA */}
-      <div className="main-content" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+      <div className="main-content" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', width: '100%' }}></div>
         <div className="topbar">
           <form onSubmit={handleMapSearch} style={{ display: 'flex', width: '350px' }}>
             <input
