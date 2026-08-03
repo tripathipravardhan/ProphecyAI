@@ -185,25 +185,23 @@ function App() {
   }
 
   return (
-    <>
-      <div className="app-container dashboard-layout">
-        {/* SIDEBAR */}
-        <div className="sidebar">
-          <div className="logo-container">
-            <Activity color="#2563eb" size={28} />
-            ProphecyAI  
-          </div>
-          <div className="nav-menu">
-            <div className={`nav-item ${activeTab === 'Dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('Dashboard')}><LayoutDashboard size={20} /> Dashboard</div>
-            <div className={`nav-item ${activeTab === 'Property Search' ? 'active' : ''}`} onClick={() => setActiveTab('Property Search')}><Search size={20} /> Property Search</div>
-            <div className={`nav-item ${activeTab === 'Price Prediction' ? 'active' : ''}`} onClick={() => setActiveTab('Price Prediction')}><BarChart2 size={20} /> Price Prediction</div>
-            <div className={`nav-item ${activeTab === 'Satellite Analysis' ? 'active' : ''}`} onClick={() => setActiveTab('Satellite Analysis')}><Map size={20} /> Satellite Analysis</div>
-            <div className={`nav-item ${activeTab === 'Investment Insights' ? 'active' : ''}`} onClick={() => setActiveTab('Investment Insights')}><TrendingUp size={20} /> Investment Insights</div>
-            <div className={`nav-item ${activeTab === 'Risk Reports' ? 'active' : ''}`} onClick={() => setActiveTab('Risk Reports')}><Shield size={20} /> Risk Reports</div>
-            <div style={{marginTop: 'auto'}}>
-              <div className={`nav-item ${activeTab === 'Settings' ? 'active' : ''}`} onClick={() => setActiveTab('Settings')}><Settings size={20} /> Settings</div>
-              <div className={`nav-item ${activeTab === 'Help & Support' ? 'active' : ''}`} onClick={() => setActiveTab('Help & Support')}><HelpCircle size={20} /> Help & Support</div>
-            </div>
+    <div className="app-container dashboard-layout">
+      {/* SIDEBAR */}
+      <div className="sidebar">
+        <div className="logo-container">
+          <Activity color="#2563eb" size={28} />
+          ProphecyAI  
+        </div>
+        <div className="nav-menu">
+          <div className={`nav-item ${activeTab === 'Dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('Dashboard')}><LayoutDashboard size={20} /> Dashboard</div>
+          <div className={`nav-item ${activeTab === 'Property Search' ? 'active' : ''}`} onClick={() => setActiveTab('Property Search')}><Search size={20} /> Property Search</div>
+          <div className={`nav-item ${activeTab === 'Price Prediction' ? 'active' : ''}`} onClick={() => setActiveTab('Price Prediction')}><BarChart2 size={20} /> Price Prediction</div>
+          <div className={`nav-item ${activeTab === 'Satellite Analysis' ? 'active' : ''}`} onClick={() => setActiveTab('Satellite Analysis')}><Map size={20} /> Satellite Analysis</div>
+          <div className={`nav-item ${activeTab === 'Investment Insights' ? 'active' : ''}`} onClick={() => setActiveTab('Investment Insights')}><TrendingUp size={20} /> Investment Insights</div>
+          <div className={`nav-item ${activeTab === 'Risk Reports' ? 'active' : ''}`} onClick={() => setActiveTab('Risk Reports')}><Shield size={20} /> Risk Reports</div>
+          <div style={{marginTop: 'auto'}}>
+            <div className={`nav-item ${activeTab === 'Settings' ? 'active' : ''}`} onClick={() => setActiveTab('Settings')}><Settings size={20} /> Settings</div>
+            <div className={`nav-item ${activeTab === 'Help & Support' ? 'active' : ''}`} onClick={() => setActiveTab('Help & Support')}><HelpCircle size={20} /> Help & Support</div>
           </div>
         </div>
       </div>
@@ -711,7 +709,7 @@ function App() {
 
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
