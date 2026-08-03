@@ -185,9 +185,9 @@ function App() {
   }
 
   return (
-    <div className="app-container dashboard-layout" style={{ display: 'flex', height: '100vh', width: '100vw', overflow: 'hidden' }}>
+    <div className="app-container dashboard-layout">
       {/* SIDEBAR */}
-      <div className="sidebar" style={{ flexShrink: 0, overflowY: 'auto', zIndex: 10 }}>
+      <div className="sidebar">
         <div className="logo-container">
           <Activity color="#2563eb" size={28} />
           ProphecyAI  
@@ -207,7 +207,7 @@ function App() {
       </div>
       
       {/* MAIN CONTENT AREA */}
-      <div className="main-content" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', width: '100%' }}>
+      <div className="main-content">
         <div className="topbar">
           <form onSubmit={handleMapSearch} style={{ display: 'flex', width: '350px' }}>
             <input 
