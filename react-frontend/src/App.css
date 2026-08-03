@@ -256,3 +256,24 @@ html, body, #root {
   box-sizing: border-box;
   overflow-x: hidden;
 }
+.dashboard-layout {
+  display: flex !important;
+  flex-direction: row !important;
+  height: 100vh !important;
+  width: 100vw !important;
+  overflow: hidden !important;
+}
+
+.sidebar {
+  flex-shrink: 0 !important;
+  height: 100vh !important;
+  overflow-y: auto !important;
+}
+
+.main-content {
+  flex: 1 !important;
+  height: 100vh !important;
+  overflow-y: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
