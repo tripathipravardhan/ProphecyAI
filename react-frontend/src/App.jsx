@@ -5,12 +5,14 @@ import { LayoutDashboard, Search, Map, BarChart2, Activity, Shield, Settings, He
 import 'leaflet/dist/leaflet.css';
 import './App.css';
 import L from 'leaflet';
+
 const customPinIcon = new L.Icon({
-  iconUrl: '/custom-pin.jpeg', // Added the .jpeg extension here
+  iconUrl: '/custom-pin.jpeg',
   iconSize: [35, 35],
   iconAnchor: [17, 35],
   popupAnchor: [0, -35]
 });
+
 function LocationMarker({ position, setPosition }) {
   useMapEvents({
     click(e) {
@@ -120,8 +122,6 @@ function App() {
     }
   };
 
- // EXACT GOOGLE ACCOUNT CHOOSER LOGIN SCREEN
-  // EXACT GOOGLE ACCOUNT CHOOSER LOGIN SCREEN
   if (!isAuthenticated) {
     return (
       <div className="app-container" style={{ height: '100vh', width: '100vw', backgroundColor: '#131314', display: 'flex', justifyContent: 'center', alignItems: 'center', fontFamily: 'Roboto, sans-serif' }}>
@@ -185,55 +185,29 @@ function App() {
   }
 
   return (
-    <div className="app-container dashboard-layout">
-      {/* SIDEBAR */}
-      <div className="sidebar">
-        <div className="logo-container">
-          <Activity color="#2563eb" size={28} />
-          ProphecyAI  
-        </div>
-        <div className="nav-menu">
-          <div className={`nav-item ${activeTab === 'Dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('Dashboard')}><LayoutDashboard size={20} /> Dashboard</div>
-          <div className={`nav-item ${activeTab === 'Property Search' ? 'active' : ''}`} onClick={() => setActiveTab('Property Search')}><Search size={20} /> Property Search</div>
-          <div className={`nav-item ${activeTab === 'Price Prediction' ? 'active' : ''}`} onClick={() => setActiveTab('Price Prediction')}><BarChart2 size={20} /> Price Prediction</div>
-          <div className={`nav-item ${activeTab === 'Satellite Analysis' ? 'active' : ''}`} onClick={() => setActiveTab('Satellite Analysis')}><Map size={20} /> Satellite Analysis</div>
-          <div className={`nav-item ${activeTab === 'Investment Insights' ? 'active' : ''}`} onClick={() => setActiveTab('Investment Insights')}><TrendingUp size={20} /> Investment Insights</div>
-          <div className={`nav-item ${activeTab === 'Risk Reports' ? 'active' : ''}`} onClick={() => setActiveTab('Risk Reports')}><Shield size={20} /> Risk Reports</div>
-          <div style={{marginTop: 'auto'}}>
-            <div className={`nav-item ${activeTab === 'Settings' ? 'active' : ''}`} onClick={() => setActiveTab('Settings')}><Settings size={20} /> Settings</div>
-            <div className={`nav-item ${activeTab === 'Help & Support' ? 'active' : ''}`} onClick={() => setActiveTab('Help & Support')}><HelpCircle size={20} /> Help & Support</div>
+    <>
+      <div className="app-container dashboard-layout">
+        {/* SIDEBAR */}
+        <div className="sidebar">
+          <div className="logo-container">
+            <Activity color="#2563eb" size={28} />
+            ProphecyAI  
+          </div>
+          <div className="nav-menu">
+            <div className={`nav-item ${activeTab === 'Dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('Dashboard')}><LayoutDashboard size={20} /> Dashboard</div>
+            <div className={`nav-item ${activeTab === 'Property Search' ? 'active' : ''}`} onClick={() => setActiveTab('Property Search')}><Search size={20} /> Property Search</div>
+            <div className={`nav-item ${activeTab === 'Price Prediction' ? 'active' : ''}`} onClick={() => setActiveTab('Price Prediction')}><BarChart2 size={20} /> Price Prediction</div>
+            <div className={`nav-item ${activeTab === 'Satellite Analysis' ? 'active' : ''}`} onClick={() => setActiveTab('Satellite Analysis')}><Map size={20} /> Satellite Analysis</div>
+            <div className={`nav-item ${activeTab === 'Investment Insights' ? 'active' : ''}`} onClick={() => setActiveTab('Investment Insights')}><TrendingUp size={20} /> Investment Insights</div>
+            <div className={`nav-item ${activeTab === 'Risk Reports' ? 'active' : ''}`} onClick={() => setActiveTab('Risk Reports')}><Shield size={20} /> Risk Reports</div>
+            <div style={{marginTop: 'auto'}}>
+              <div className={`nav-item ${activeTab === 'Settings' ? 'active' : ''}`} onClick={() => setActiveTab('Settings')}><Settings size={20} /> Settings</div>
+              <div className={`nav-item ${activeTab === 'Help & Support' ? 'active' : ''}`} onClick={() => setActiveTab('Help & Support')}><HelpCircle size={20} /> Help & Support</div>
+            </div>
           </div>
         </div>
       </div>
       
-      </div>
-      {/* MAIN CONTENT AREA */}
-      <div className="main-content">
-        <div className="topbar">
-          <form onSubmit={handleMapSearch} style={{ display: 'flex', width: '350px' }}>
-            <input 
-              type="text" 
-              className="search-bar" 
-              value={topBarQuery}
-              onChange={(e) => setTopBarQuery(e.target.value)}
-              placeholder="Search locality, city or project..." 
-              style={{ width: '100%' }}
-            />
-          </form>
-
-          <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-            <span style={{ color: 'var(--text-muted)' }}>📍 India </span>
-            <Bell size={20} color="var(--text-muted)" />
-            
-            <div title={userEmail} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-              <div style={{ width: '35px', height: '35px', borderRadius: '50%', backgroundColor: '#2563eb', display: 'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold', color: 'white' }}>
-                {userEmail ? userEmail.charAt(0).toUpperCase() : 'U'}
-              </div>
-              <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{userEmail}</span>
-            </div>
-          </div>
-        </div>
-
       {/* MAIN CONTENT AREA */}
       <div className="main-content">
         <div className="topbar">
@@ -737,8 +711,8 @@ function App() {
 
         </div>
       </div>
-    </div>
+    </>
   );
-  }
+}
 
 export default App;
