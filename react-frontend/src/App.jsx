@@ -34,12 +34,12 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userEmail, setUserEmail] = useState('');
 
-  const defaultCenter = [26.8467, 80.9462];
+  const defaultCenter = [26.8467, 80.9462]; 
   const [position, setPosition] = useState(null);
-  const [mapCenter, setMapCenter] = useState(defaultCenter);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [mapCenter, setMapCenter] = useState(defaultCenter); 
+  const [searchQuery, setSearchQuery] = useState(''); 
   const [topBarQuery, setTopBarQuery] = useState('');
-
+  
   const [plotType, setPlotType] = useState('Apartment');
   const [area, setArea] = useState(5000);
   const [results, setResults] = useState(null);
@@ -77,14 +77,14 @@ function App() {
     try {
       const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${queryToUse}`);
       const data = await res.json();
-
+      
       if (data && data.length > 0) {
         const newLat = parseFloat(data[0].lat);
         const newLng = parseFloat(data[0].lon);
         const newLocation = { lat: newLat, lng: newLng };
-
-        setMapCenter(newLocation);
-        setPosition(newLocation);
+        
+        setMapCenter(newLocation); 
+        setPosition(newLocation);  
         setActiveTab('Dashboard');
       } else {
         alert("Location not found. Please try a more specific search.");
@@ -97,7 +97,7 @@ function App() {
   const handlePredict = async (e) => {
     e.preventDefault();
     if (!position) return alert("Please drop a pin on the map first!");
-
+    
     setLoading(true);
     setResults(null);
 
@@ -126,9 +126,9 @@ function App() {
     return (
       <div className="app-container" style={{ height: '100vh', width: '100vw', backgroundColor: '#131314', display: 'flex', justifyContent: 'center', alignItems: 'center', fontFamily: 'Roboto, sans-serif' }}>
         <div style={{ backgroundColor: '#1e1f20', padding: '40px', borderRadius: '12px', width: '450px', maxWidth: '90%', boxShadow: '0 4px 24px rgba(0,0,0,0.5)', color: '#e3e3e3' }}>
-
+          
           <div style={{ marginBottom: '25px' }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" style={{ marginBottom: '15px' }}><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.3 8.9 5 12 5z" /><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z" /><path fill="#FBBC05" d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.7s.2-2 .4-2.7L1.6 6.4C.6 8.4 0 10.6 0 13s.6 4.6 1.6 6.6l3.7-2.9z" /><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.3L1.6 15c1.9 3.8 5.8 8 10.4 8z" /></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" style={{ marginBottom: '15px' }}><path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.3 8.9 5 12 5z"/><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/><path fill="#FBBC05" d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.7s.2-2 .4-2.7L1.6 6.4C.6 8.4 0 10.6 0 13s.6 4.6 1.6 6.6l3.7-2.9z"/><path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.3L1.6 15c1.9 3.8 5.8 8 10.4 8z"/></svg>
             <h1 style={{ fontSize: '24px', fontWeight: '400', margin: '0 0 8px 0', color: '#e3e3e3' }}>Choose an account</h1>
             <p style={{ fontSize: '14px', color: '#8e918f', margin: 0 }}>to continue to ProphecyAI</p>
           </div>
@@ -139,7 +139,7 @@ function App() {
               { name: "Pravardhan Tripathi", email: "2k24.cs1l.2413159@gmail.com" },
               { name: "Kundan Kumar", email: "kundan.aktu2024@gmail.com" }
             ].map((acc, idx) => (
-              <div
+              <div 
                 key={idx}
                 onClick={() => {
                   setUserEmail(acc.email);
@@ -159,7 +159,7 @@ function App() {
               </div>
             ))}
 
-            <div
+            <div 
               onClick={() => {
                 const em = prompt("Enter another Gmail address:");
                 if (em) { setUserEmail(em); setIsAuthenticated(true); }
@@ -186,9 +186,6 @@ function App() {
 
   return (
     <div className="app-container dashboard-layout" style={{ display: 'flex', height: '100vh', width: '100vw', overflow: 'hidden' }}>
-      return (
-    <div className="app-container dashboard-layout" style={{ display: 'flex', height: '100vh', width: '100vw', overflow: 'hidden' }}>
-      
       {/* SIDEBAR */}
       <div className="sidebar" style={{ flexShrink: 0, overflowY: 'auto', zIndex: 10 }}>
         <div className="logo-container">
@@ -210,15 +207,15 @@ function App() {
       </div>
       
       {/* MAIN CONTENT AREA */}
-      <div className="main-content" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', width: '100%' }}></div>
+      <div className="main-content" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', width: '100%' }}>
         <div className="topbar">
           <form onSubmit={handleMapSearch} style={{ display: 'flex', width: '350px' }}>
-            <input
-              type="text"
-              className="search-bar"
+            <input 
+              type="text" 
+              className="search-bar" 
               value={topBarQuery}
               onChange={(e) => setTopBarQuery(e.target.value)}
-              placeholder="Search locality, city or project..."
+              placeholder="Search locality, city or project..." 
               style={{ width: '100%' }}
             />
           </form>
@@ -226,9 +223,9 @@ function App() {
           <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
             <span style={{ color: 'var(--text-muted)' }}>📍 India </span>
             <Bell size={20} color="var(--text-muted)" />
-
+            
             <div title={userEmail} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
-              <div style={{ width: '35px', height: '35px', borderRadius: '50%', backgroundColor: '#2563eb', display: 'flex', justifyContent: 'center', alignItems: 'center', fontWeight: 'bold', color: 'white' }}>
+              <div style={{ width: '35px', height: '35px', borderRadius: '50%', backgroundColor: '#2563eb', display: 'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold', color: 'white' }}>
                 {userEmail ? userEmail.charAt(0).toUpperCase() : 'U'}
               </div>
               <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{userEmail}</span>
@@ -241,7 +238,7 @@ function App() {
             <>
               <div className="kpi-row" style={{ gridTemplateColumns: 'repeat(6, 1fr)' }}>
                 <div className="kpi-card">
-                  <div className="kpi-icon" style={{ color: '#3b82f6' }}><Home /></div>
+                  <div className="kpi-icon" style={{color: '#3b82f6'}}><Home /></div>
                   <div className="kpi-data">
                     <p>Current Rate</p>
                     <h3>{results ? results.current_price_per_sqft : '---'}</h3>
@@ -249,7 +246,7 @@ function App() {
                 </div>
 
                 <div className="kpi-card">
-                  <div className="kpi-icon" style={{ color: '#3b82f6' }}><Home /></div>
+                  <div className="kpi-icon" style={{color: '#3b82f6'}}><Home /></div>
                   <div className="kpi-data">
                     <p>Current Property Price</p>
                     <h3>{results ? results.current_total_price : '---'}</h3>
@@ -257,25 +254,25 @@ function App() {
                 </div>
 
                 <div className="kpi-card">
-                  <div className="kpi-icon" style={{ backgroundColor: 'rgba(16, 185, 129, 0.2)', color: '#10b981' }}><TrendingUp /></div>
+                  <div className="kpi-icon" style={{backgroundColor: 'rgba(16, 185, 129, 0.2)', color: '#10b981'}}><TrendingUp /></div>
                   <div className="kpi-data">
                     <p>2028 Total (Profit)</p>
-                    <h3 style={{ color: '#10b981', fontSize: '15px' }}>{results ? results.predicted_2028_total : '---'}</h3>
-                    <p style={{ color: '#10b981', fontSize: '11px', fontWeight: 'bold' }}>{results ? `Profit: ${results.profit_2028}` : ''}</p>
+                    <h3 style={{color: '#10b981', fontSize: '15px'}}>{results ? results.predicted_2028_total : '---'}</h3>
+                    <p style={{color: '#10b981', fontSize: '11px', fontWeight: 'bold'}}>{results ? `Profit: ${results.profit_2028}` : ''}</p>
                   </div>
                 </div>
 
                 <div className="kpi-card">
-                  <div className="kpi-icon" style={{ backgroundColor: 'rgba(139, 92, 246, 0.2)', color: '#8b5cf6' }}><TrendingUp /></div>
+                  <div className="kpi-icon" style={{backgroundColor: 'rgba(139, 92, 246, 0.2)', color: '#8b5cf6'}}><TrendingUp /></div>
                   <div className="kpi-data">
                     <p>2032 Total (Profit)</p>
-                    <h3 style={{ color: '#8b5cf6', fontSize: '15px' }}>{results ? results.predicted_2032_total : '---'}</h3>
-                    <p style={{ color: '#8b5cf6', fontSize: '11px', fontWeight: 'bold' }}>{results ? `Profit: ${results.profit_2032}` : ''}</p>
+                    <h3 style={{color: '#8b5cf6', fontSize: '15px'}}>{results ? results.predicted_2032_total : '---'}</h3>
+                    <p style={{color: '#8b5cf6', fontSize: '11px', fontWeight: 'bold'}}>{results ? `Profit: ${results.profit_2032}` : ''}</p>
                   </div>
                 </div>
 
                 <div className="kpi-card">
-                  <div className="kpi-icon" style={{ backgroundColor: 'rgba(245, 158, 11, 0.2)', color: '#f59e0b' }}><Activity /></div>
+                  <div className="kpi-icon" style={{backgroundColor: 'rgba(245, 158, 11, 0.2)', color: '#f59e0b'}}><Activity /></div>
                   <div className="kpi-data">
                     <p>Urban Growth Index</p>
                     <h3>{results ? `${results.urban_growth_index} / 10` : '---'}</h3>
@@ -283,10 +280,10 @@ function App() {
                 </div>
 
                 <div className="kpi-card">
-                  <div className="kpi-icon" style={{ backgroundColor: 'rgba(59, 130, 246, 0.2)', color: '#3b82f6' }}><Target /></div>
+                  <div className="kpi-icon" style={{backgroundColor: 'rgba(59, 130, 246, 0.2)', color: '#3b82f6'}}><Target /></div>
                   <div className="kpi-data">
                     <p>Investment Potential</p>
-                    <h3 style={{ color: '#10b981' }}>High</h3>
+                    <h3 style={{color: '#10b981'}}>High</h3>
                   </div>
                 </div>
               </div>
@@ -294,12 +291,12 @@ function App() {
               <div className="middle-row">
                 <div className="panel-card">
                   <form onSubmit={handleMapSearch} style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search city or state to jump..."
-                      style={{ flex: 1, padding: '8px 15px', backgroundColor: 'var(--bg-dark)', color: 'white', border: '1px solid var(--border-color)', borderRadius: '5px' }}
+                    <input 
+                      type="text" 
+                      value={searchQuery} 
+                      onChange={(e) => setSearchQuery(e.target.value)} 
+                      placeholder="Search city or state to jump..." 
+                      style={{ flex: 1, padding: '8px 15px', backgroundColor: 'var(--bg-dark)', color: 'white', border: '1px solid var(--border-color)', borderRadius: '5px' }} 
                     />
                     <button type="submit" style={{ padding: '8px 20px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}>
                       <Search size={16} /> Locate
@@ -320,8 +317,8 @@ function App() {
 
                   <div style={{ flex: 1, borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
                     <MapContainer center={mapCenter} zoom={13} style={{ height: '100%', width: '100%' }}>
-                      <TileLayer
-                        url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
+                      <TileLayer 
+                        url="https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}" 
                         attribution="&copy; Google Maps"
                       />
                       <LocationMarker position={position} setPosition={setPosition} />
@@ -342,7 +339,7 @@ function App() {
                             <p>Since 2018</p>
                           </div>
                         </div>
-                        <h4 style={{ color: '#ef4444', margin: 0 }}>{results.environmental_risk.green_loss}</h4>
+                        <h4 style={{color: '#ef4444', margin: 0}}>{results.environmental_risk.green_loss}</h4>
                       </div>
 
                       <div className="list-item">
@@ -353,7 +350,7 @@ function App() {
                             <p>Since 2018</p>
                           </div>
                         </div>
-                        <h4 style={{ color: '#f59e0b', margin: 0 }}>{results.environmental_risk.built_up_growth}</h4>
+                        <h4 style={{color: '#f59e0b', margin: 0}}>{results.environmental_risk.built_up_growth}</h4>
                       </div>
 
                       <div className="list-item">
@@ -364,7 +361,7 @@ function App() {
                             <p>Historical Data</p>
                           </div>
                         </div>
-                        <h4 style={{ color: '#3b82f6', margin: 0 }}>{results.environmental_risk.flood_risk}</h4>
+                        <h4 style={{color: '#3b82f6', margin: 0}}>{results.environmental_risk.flood_risk}</h4>
                       </div>
                     </>
                   ) : (
@@ -383,8 +380,8 @@ function App() {
                       <div className="list-item" key={index}>
                         <div className="item-left">
                           <div className="kpi-icon" style={{
-                            padding: '8px',
-                            backgroundColor: infra.color === 'blue' ? 'rgba(59,130,246,0.2)' : infra.color === 'orange' ? 'rgba(245,158,11,0.2)' : 'rgba(16,185,129,0.2)',
+                            padding: '8px', 
+                            backgroundColor: infra.color === 'blue' ? 'rgba(59,130,246,0.2)' : infra.color === 'orange' ? 'rgba(245,158,11,0.2)' : 'rgba(16,185,129,0.2)', 
                             color: infra.color === 'blue' ? '#3b82f6' : infra.color === 'orange' ? '#f59e0b' : '#10b981'
                           }}>
                             {infra.color === 'blue' ? <Train size={16} /> : infra.color === 'orange' ? <Target size={16} /> : <Activity size={16} />}
@@ -459,16 +456,16 @@ function App() {
                   <h2>🔍 Live Real-World Property & Market Index</h2>
                   <p style={{ color: 'var(--text-muted)', margin: 0 }}>Search any city, view buying prices, and calculate forward profits.</p>
                 </div>
-
+                
                 <div style={{ display: 'flex', gap: '10px' }}>
-                  <input
-                    type="text"
+                  <input 
+                    type="text" 
                     value={propertySearchInput}
                     onChange={(e) => setPropertySearchInput(e.target.value)}
-                    placeholder="Search city (e.g. Chennai, Pune)..."
-                    style={{ padding: '8px 15px', backgroundColor: 'var(--bg-dark)', color: 'white', border: '1px solid var(--border-color)', borderRadius: '5px', width: '250px' }}
+                    placeholder="Search city (e.g. Chennai, Pune)..." 
+                    style={{ padding: '8px 15px', backgroundColor: 'var(--bg-dark)', color: 'white', border: '1px solid var(--border-color)', borderRadius: '5px', width: '250px' }} 
                   />
-                  <button
+                  <button 
                     type="button"
                     onClick={async () => {
                       try {
@@ -497,7 +494,7 @@ function App() {
                         <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>📍 {property.city}</span>
                       </div>
                       <h4 style={{ margin: '5px 0 10px 0', fontSize: '16px' }}>{property.name}</h4>
-
+                      
                       <div style={{ backgroundColor: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '6px', marginBottom: '12px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '4px' }}>
                           <span style={{ color: 'var(--text-muted)' }}>Rate:</span>
@@ -516,10 +513,10 @@ function App() {
                         <span style={{ color: '#8b5cf6' }}>2032 Profit: <b>{property.profit_2032}</b></span>
                       </div>
 
-                      <a
-                        href={property.external_link}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <a 
+                        href={property.external_link} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
                         style={{ display: 'block', textAlign: 'center', padding: '8px', backgroundColor: '#2563eb', color: 'white', borderRadius: '5px', textDecoration: 'none', fontSize: '13px', fontWeight: 'bold' }}
                       >
                         View on Real Estate Portal ↗
@@ -535,11 +532,11 @@ function App() {
             <div className="panel-card" style={{ padding: '30px', height: '100%' }}>
               <h2>📊 XGBoost Model Training & Hyperparameter Studio</h2>
               <p style={{ color: 'var(--text-muted)' }}>Configure spatial decision trees and evaluate model performance metrics in real-time.</p>
-
+              
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '20px' }}>
                 <div style={{ backgroundColor: 'var(--bg-dark)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
                   <h3><Sliders size={18} color="#2563eb" /> Model Parameters</h3>
-
+                  
                   <label style={{ display: 'block', margin: '15px 0 5px', fontSize: '14px' }}>Number of Estimators (Trees): <b>{mlTrees}</b></label>
                   <input type="range" min="50" max="500" step="25" value={mlTrees} onChange={(e) => setMlTrees(e.target.value)} style={{ width: '100%' }} />
 
@@ -574,7 +571,7 @@ function App() {
             <div className="panel-card" style={{ padding: '20px', height: '100%', display: 'flex', flexDirection: 'column' }}>
               <h2>🛰️ GIS Multispectral Satellite Intelligence</h2>
               <p style={{ color: 'var(--text-muted)', marginBottom: '15px' }}>High-resolution spectral analysis tracking urban heat islands and vegetation indices.</p>
-
+              
               <div style={{ flex: 1, borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
                 <MapContainer center={[19.0760, 72.8777]} zoom={11} style={{ height: '100%', width: '100%' }}>
                   <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" attribution="Esri World Imagery" />
@@ -587,7 +584,7 @@ function App() {
             <div className="panel-card" style={{ padding: '30px', height: '100%' }}>
               <h2>💡 Macroeconomic Investment Corridor Insights</h2>
               <p style={{ color: 'var(--text-muted)' }}>AI-driven trend forecasting based on upcoming transit expansions and municipal master plans.</p>
-
+              
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px', marginTop: '20px' }}>
                 <div style={{ backgroundColor: 'var(--bg-dark)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
                   <span className="badge green" style={{ marginBottom: '10px', display: 'inline-block' }}>Tier-1 Corridor</span>
@@ -612,7 +609,7 @@ function App() {
             <div className="panel-card" style={{ padding: '30px', height: '100%' }}>
               <h2>🛡️ Comprehensive Environmental & Zoning Risk Audit</h2>
               <p style={{ color: 'var(--text-muted)' }}>Automated compliance verification against flood zones, seismic parameters, and eco-sensitive land regulations.</p>
-
+              
               <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginTop: '20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '15px', backgroundColor: 'var(--bg-dark)', borderRadius: '8px', border: '1px solid var(--border-color)', alignItems: 'center' }}>
                   <div>
@@ -689,17 +686,17 @@ function App() {
                 <form onSubmit={(e) => { e.preventDefault(); setSupportSent(true); }} style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginTop: '20px' }}>
                   <div>
                     <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: 'bold' }}>Your Name</label>
-                    <input type="text" required value={supportForm.name} onChange={(e) => setSupportForm({ ...supportForm, name: e.target.value })} placeholder="Enter your name" style={{ width: '100%', padding: '10px', backgroundColor: 'var(--bg-dark)', color: 'white', border: '1px solid var(--border-color)', borderRadius: '5px' }} />
+                    <input type="text" required value={supportForm.name} onChange={(e) => setSupportForm({...supportForm, name: e.target.value})} placeholder="Enter your name" style={{ width: '100%', padding: '10px', backgroundColor: 'var(--bg-dark)', color: 'white', border: '1px solid var(--border-color)', borderRadius: '5px' }} />
                   </div>
 
                   <div>
                     <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: 'bold' }}>Email Address</label>
-                    <input type="email" required value={supportForm.email} onChange={(e) => setSupportForm({ ...supportForm, email: e.target.value })} placeholder="name@example.com" style={{ width: '100%', padding: '10px', backgroundColor: 'var(--bg-dark)', color: 'white', border: '1px solid var(--border-color)', borderRadius: '5px' }} />
+                    <input type="email" required value={supportForm.email} onChange={(e) => setSupportForm({...supportForm, email: e.target.value})} placeholder="name@example.com" style={{ width: '100%', padding: '10px', backgroundColor: 'var(--bg-dark)', color: 'white', border: '1px solid var(--border-color)', borderRadius: '5px' }} />
                   </div>
 
                   <div>
                     <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: 'bold' }}>Issue or Inquiry</label>
-                    <textarea rows="4" required value={supportForm.message} onChange={(e) => setSupportForm({ ...supportForm, message: e.target.value })} placeholder="Describe your technical issue or question..." style={{ width: '100%', padding: '10px', backgroundColor: 'var(--bg-dark)', color: 'white', border: '1px solid var(--border-color)', borderRadius: '5px', fontFamily: 'inherit' }}></textarea>
+                    <textarea rows="4" required value={supportForm.message} onChange={(e) => setSupportForm({...supportForm, message: e.target.value})} placeholder="Describe your technical issue or question..." style={{ width: '100%', padding: '10px', backgroundColor: 'var(--bg-dark)', color: 'white', border: '1px solid var(--border-color)', borderRadius: '5px', fontFamily: 'inherit' }}></textarea>
                   </div>
 
                   <button type="submit" style={{ padding: '12px', backgroundColor: '#2563eb', color: 'white', border: 'none', borderRadius: '5px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
