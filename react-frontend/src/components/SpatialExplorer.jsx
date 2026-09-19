@@ -32,7 +32,7 @@ export default function SpatialExplorer({ location, onFallback }) {
   const [status, setStatus] = useState('loading');
   const [places, setPlaces] = useState([]);
   const [filter, setFilter] = useState('All');
-  const [mapMode, setMapMode] = useState('standard');
+  const [mapMode, setMapMode] = useState('satellite');
   const demo = findDemoProperty(location.lat, location.lng);
 
   useEffect(() => {
@@ -60,16 +60,26 @@ export default function SpatialExplorer({ location, onFallback }) {
         const Cesium = await loadCesium();
         if (disposed) return;
         const viewer = new Cesium.Viewer(host.current, {
-        animation: false, baseLayerPicker: false, geocoder: false, homeButton: false, infoBox: false,
-        sceneModePicker: false, selectionIndicator: false, timeline: false, navigationHelpButton: false,
-        fullscreenButton: false, terrain: undefined,
-      });
+          animation: false, baseLayerPicker: false, geocoder: false, homeButton: false, infoBox: false,
+          sceneModePicker: false, selectionIndicator: false, timeline: false, navigationHelpButton: false,
+          fullscreenButton: false, terrain: undefined,
+        });
         viewer.imageryLayers.removeAll();
-        viewer.imageryLayers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({ url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', subdomains: ['a', 'b', 'c'] }));
+        viewer.imageryLayers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({
+          url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+        }));
+        viewer.imageryLayers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({
+          url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png',
+          subdomains: ['a', 'b', 'c', 'd']
+        }));
         viewer.scene.globe.depthTestAgainstTerrain = false;
         viewerRef.current = viewer;
         setStatus('ready');
-        viewer.camera.flyTo({ destination: Cesium.Cartesian3.fromDegrees(location.lng, location.lat - 0.008, 1250), orientation: { heading: 0, pitch: Cesium.Math.toRadians(-42), roll: 0 }, duration: 1.4 });
+        viewer.camera.flyTo({ 
+          destination: Cesium.Cartesian3.fromDegrees(location.lng, location.lat - 0.008, 1250), 
+          orientation: { heading: 0, pitch: Cesium.Math.toRadians(-42), roll: 0 }, 
+          duration: 1.4 
+        });
       } catch {
         if (!disposed) {
           setStatus('scene-error');
@@ -80,6 +90,19 @@ export default function SpatialExplorer({ location, onFallback }) {
     initialise();
     return () => { disposed = true; viewerRef.current?.destroy(); viewerRef.current = null; };
   }, [location.lat, location.lng, onFallback]);
+
+  // Handle camera flyTo when location updates dynamically
+  useEffect(() => {
+    const Cesium = window.Cesium;
+    const viewer = viewerRef.current;
+    if (Cesium && viewer && status === 'ready') {
+      viewer.camera.flyTo({ 
+        destination: Cesium.Cartesian3.fromDegrees(location.lng, location.lat - 0.008, 1250), 
+        orientation: { heading: 0, pitch: Cesium.Math.toRadians(-42), roll: 0 }, 
+        duration: 1.2 
+      });
+    }
+  }, [location.lat, location.lng, status]);
 
   useEffect(() => {
     const Cesium = window.Cesium;
@@ -100,7 +123,7 @@ export default function SpatialExplorer({ location, onFallback }) {
         outlineColor: Cesium.Color.WHITE 
       }, 
       label: { 
-        text: demo ? `${demo.name}` : 'SELECTED PROPERTY', 
+        text: location.label || (demo ? demo.name : 'SELECTED PROPERTY'), 
         font: '600 13px sans-serif', 
         fillColor: Cesium.Color.WHITE, 
         outlineColor: Cesium.Color.fromCssColorString('#06242b'), 
@@ -185,6 +208,10 @@ export default function SpatialExplorer({ location, onFallback }) {
       viewer.imageryLayers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({
         url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
       }));
+      viewer.imageryLayers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({
+        url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png',
+        subdomains: ['a', 'b', 'c', 'd']
+      }));
     } else {
       viewer.imageryLayers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({ 
         url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
@@ -198,7 +225,7 @@ export default function SpatialExplorer({ location, onFallback }) {
       <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 1000, background: 'rgba(21, 27, 35, 0.9)', padding: '15px', borderRadius: '8px', border: '1px solid #27303b', width: '220px', pointerEvents: 'auto' }}>
         <div style={{ marginBottom: '10px' }}>
           <span className="eyebrow" style={{ color: '#62d4e4', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '1px' }}>3D Spatial Web</span>
-          <b style={{ display: 'block', color: '#fff', fontSize: '14px' }}>{demo ? 'Demonstration property context' : '3D building context'}</b>
+          <b style={{ display: 'block', color: '#fff', fontSize: '14px', wordBreak: 'break-word' }}>{location.label || (demo ? demo.name : '3D building context')}</b>
         </div>
         
         {/* Map View Toggle */}

@@ -31,11 +31,13 @@ export default function Analyze() {
       });
       const data = await response.json();
       if (!data?.length) throw new Error();
-      setLocation({
+      const newLoc = {
         lat: Number(data[0].lat),
         lng: Number(data[0].lon),
         label: data[0].display_name.split(',').slice(0, 3).join(','),
-      });
+      };
+      setLocation(newLoc);
+      localStorage.setItem('prophecy_active_location', JSON.stringify(newLoc));
       setSearchState('success');
     } catch {
       setSearchState('error');
@@ -150,7 +152,7 @@ export default function Analyze() {
               </div>
             </div>
             <div style={{ flex: 1, minHeight: '400px', borderRadius: '8px', overflow: 'hidden' }}>
-              <GeoMap location={location} onPick={setLocation} mode={mapMode} />
+              <GeoMap location={location} onPick={(newLoc) => { setLocation(newLoc); localStorage.setItem('prophecy_active_location', JSON.stringify(newLoc)); }} mode={mapMode} />
             </div>
           </div>
         </div>

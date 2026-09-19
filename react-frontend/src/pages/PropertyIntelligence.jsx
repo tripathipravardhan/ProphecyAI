@@ -120,8 +120,8 @@ export default function PropertyIntelligence() {
       setLoading(true);
       setError(null);
       const { location, property } = propertyContext;
-      
       try {
+        localStorage.setItem('prophecy_active_location', JSON.stringify(location));
         const API_URL = 'http://127.0.0.1:8000';
         
         // 1. Prediction Model
@@ -309,7 +309,12 @@ export default function PropertyIntelligence() {
                 <NumberLabel>Spatial Context</NumberLabel>
                 <h3 style={{ color: '#fff', margin: 0 }}>Property & Surroundings</h3>
               </div>
-              <Link to={`/explore${propertyId !== 'custom' ? `?property=${propertyId}` : ''}`} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', background: '#62d4e4', color: '#06242b', borderRadius: '6px', textDecoration: 'none', fontWeight: 'bold', fontSize: '14px' }}>
+              <Link 
+                to={`/explore?lat=${location.lat}&lng=${location.lng}&label=${encodeURIComponent(location.label)}${propertyId !== 'custom' ? `&property=${propertyId}` : ''}`} 
+                state={{ location }}
+                onClick={() => localStorage.setItem('prophecy_active_location', JSON.stringify(location))}
+                style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', background: '#62d4e4', color: '#06242b', borderRadius: '6px', textDecoration: 'none', fontWeight: 'bold', fontSize: '14px' }}
+              >
                 <Layers3 size={16} /> Open 3D Explorer
               </Link>
             </div>
