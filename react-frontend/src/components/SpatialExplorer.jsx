@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
+import { Search, ArrowRight } from 'lucide-react';
 import { findDemoProperty } from '../data/demoProperties';
+
+const displayCategories = ['All', 'Connectivity', 'Healthcare', 'Education', 'Daily Life', 'Infrastructure'];
 
 const colors = {
   Metro: '#66d8ea', Railway: '#a78bfa', 'Bus stop': '#f5b971', Hospital: '#f37e7e', Clinic: '#f3a5a5',
@@ -26,14 +29,45 @@ function loadCesium() {
   return cesiumPromise;
 }
 
-export default function SpatialExplorer({ location, onFallback }) {
+export default function SpatialExplorer({ location, onLocationChange, onFallback }) {
   const host = useRef(null);
   const viewerRef = useRef(null);
   const [status, setStatus] = useState('loading');
   const [places, setPlaces] = useState([]);
   const [filter, setFilter] = useState('All');
   const [mapMode, setMapMode] = useState('satellite');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState('');
   const demo = findDemoProperty(location.lat, location.lng);
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    setIsSearching(true);
+    setSearchError('');
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(searchQuery + ', India')}`, {
+        headers: { Accept: 'application/json' }
+      });
+      const data = await res.json();
+      if (!data || !data.length) throw new Error('Location not found');
+      const newLoc = {
+        lat: Number(data[0].lat),
+        lng: Number(data[0].lon),
+        label: data[0].display_name.split(',').slice(0, 3).join(',')
+      };
+      localStorage.setItem('prophecy_active_location', JSON.stringify(newLoc));
+      if (onLocationChange) {
+        onLocationChange(newLoc);
+      }
+      setSearchQuery('');
+    } catch {
+      setSearchError("Location not found. Try a specific place or city.");
+    } finally {
+      setIsSearching(false);
+    }
+  };
 
   // 1. Fetch nearby amenities whenever location coordinates change
   useEffect(() => {
@@ -232,6 +266,24 @@ export default function SpatialExplorer({ location, onFallback }) {
             {location.lat?.toFixed(4)}, {location.lng?.toFixed(4)}
           </small>
         </div>
+
+        {/* Search location inside 3D Explorer */}
+        <form onSubmit={handleSearch} style={{ marginBottom: '10px' }}>
+          <div style={{ display: 'flex', background: '#0e1217', border: '1px solid #27303b', borderRadius: '6px', padding: '3px 6px', alignItems: 'center' }}>
+            <Search size={13} color="#8d9aa8" style={{ marginRight: '6px', flexShrink: 0 }} />
+            <input 
+              type="text" 
+              placeholder="Search 3D location..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{ flex: 1, background: 'transparent', border: 'none', color: '#fff', fontSize: '11px', outline: 'none', width: '100%' }}
+            />
+            <button type="submit" disabled={isSearching} style={{ background: '#62d4e4', border: 'none', color: '#06242b', borderRadius: '4px', padding: '3px 6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {isSearching ? '...' : <ArrowRight size={12} />}
+            </button>
+          </div>
+          {searchError && <small style={{ color: '#f37e7e', fontSize: '10px', display: 'block', marginTop: '4px' }}>{searchError}</small>}
+        </form>
         
         {/* Map View Toggle */}
         <div style={{ display: 'flex', gap: '4px', marginBottom: '12px', background: '#0e1217', padding: '4px', borderRadius: '6px', border: '1px solid #27303b' }}>

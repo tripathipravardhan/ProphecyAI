@@ -90,8 +90,8 @@ export default function PropertyIntelligence() {
   const [places, setPlaces] = useState([]);
   const [envContext, setEnvContext] = useState(null);
 
-  // Determine location based on URL param or router state
-  const propertyContext = useMemo(() => {
+  // Determine initial location based on URL param or router state
+  const initialContext = useMemo(() => {
     if (propertyId === 'custom' && locationState) {
       return {
         location: locationState.location,
@@ -107,19 +107,30 @@ export default function PropertyIntelligence() {
         isDemo: true
       };
     }
-    return null;
+    return {
+      location: { lat: 28.627, lng: 77.362, label: 'Sector 62, Noida' },
+      property: { type: 'Apartment', area: '1500', intent: 'Buying' },
+      isDemo: true
+    };
   }, [propertyId, locationState]);
+
+  const [activeLoc, setActiveLoc] = useState(initialContext.location);
+
+  useEffect(() => {
+    setActiveLoc(initialContext.location);
+  }, [initialContext]);
 
   const [result, setResult] = useState(null);
   
   useEffect(() => {
-    if (!propertyContext) return;
+    if (!activeLoc) return;
     
     let isMounted = true;
     const fetchData = async () => {
       setLoading(true);
       setError(null);
-      const { location, property } = propertyContext;
+      const location = activeLoc;
+      const property = initialContext.property;
       try {
         localStorage.setItem('prophecy_active_location', JSON.stringify(location));
         const API_URL = 'http://127.0.0.1:8000';
@@ -197,11 +208,8 @@ export default function PropertyIntelligence() {
     return () => { isMounted = false; };
   }, [propertyContext]);
 
-  if (!propertyContext) {
-    return <div style={{ padding: '2rem', color: '#fff' }}>Property not found. <Link to="/properties" style={{ color: '#62d4e4' }}>Go back</Link></div>;
-  }
-
-  const { location, property, isDemo } = propertyContext;
+  const location = activeLoc;
+  const { property, isDemo } = initialContext;
   
   // Create mock chart data from current and projected prices
   const currentVal = result ? Number(String(result.current_total_price).replace(/[^0-9.]/g, '')) * (String(result.current_total_price).includes('Crore') ? 10000000 : 100000) : 0;
@@ -310,9 +318,9 @@ export default function PropertyIntelligence() {
                 <h3 style={{ color: '#fff', margin: 0 }}>Property & Surroundings</h3>
               </div>
               <Link 
-                to={`/explore?lat=${location.lat}&lng=${location.lng}&label=${encodeURIComponent(location.label)}${propertyId !== 'custom' ? `&property=${propertyId}` : ''}`} 
-                state={{ location }}
-                onClick={() => localStorage.setItem('prophecy_active_location', JSON.stringify(location))}
+                to={`/explore?lat=${activeLoc.lat}&lng=${activeLoc.lng}&label=${encodeURIComponent(activeLoc.label)}${propertyId !== 'custom' ? `&property=${propertyId}` : ''}`} 
+                state={{ location: activeLoc }}
+                onClick={() => localStorage.setItem('prophecy_active_location', JSON.stringify(activeLoc))}
                 style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', background: '#62d4e4', color: '#06242b', borderRadius: '6px', textDecoration: 'none', fontWeight: 'bold', fontSize: '14px' }}
               >
                 <Layers3 size={16} /> Open 3D Explorer
@@ -333,8 +341,15 @@ export default function PropertyIntelligence() {
             </div>
 
             <div style={{ height: '500px', width: '100%', position: 'relative' }}>
-              {/* Map rendered with selected mode tiles */}
-              <GeoMap location={location} mode={mapMode} />
+              {/* Map rendered with selected mode tiles and pickable pin */}
+              <GeoMap 
+                location={activeLoc} 
+                onPick={(newLoc) => { 
+                  setActiveLoc(newLoc); 
+                  localStorage.setItem('prophecy_active_location', JSON.stringify(newLoc)); 
+                }} 
+                mode={mapMode} 
+              />
               
               {/* Map View Toggle */}
               <div style={{ position: 'absolute', bottom: 10, right: 10, zIndex: 1000, background: '#151b23', padding: '4px', borderRadius: '8px', border: '1px solid #27303b', display: 'flex', gap: '4px' }}>

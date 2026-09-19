@@ -17,6 +17,27 @@ export default function Properties() {
     if (!term.trim()) return;
     setState('loading');
     setIsDemo(false);
+    
+    // Geocode search query to sync location globally
+    try {
+      const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(term + ', India')}`, {
+        headers: { Accept: 'application/json' }
+      });
+      if (geoRes.ok) {
+        const geoData = await geoRes.json();
+        if (geoData?.length) {
+          const loc = {
+            lat: Number(geoData[0].lat),
+            lng: Number(geoData[0].lon),
+            label: geoData[0].display_name.split(',').slice(0, 3).join(',')
+          };
+          localStorage.setItem('prophecy_active_location', JSON.stringify(loc));
+        }
+      }
+    } catch {
+      // ignore
+    }
+
     try {
       const response = await fetch(`${API_URL}?query=${encodeURIComponent(term)}`);
       if (!response.ok) throw new Error();
@@ -138,12 +159,15 @@ export default function Properties() {
                   </div>
                 </div>
                 
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                  <button onClick={() => navigate('/analyze')} style={{ flex: 1, padding: '10px', background: '#27303b', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}>
-                    Analyze location
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button onClick={() => navigate('/analyze')} style={{ flex: 1, padding: '8px 10px', background: '#27303b', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px' }}>
+                    Analyze
                   </button>
-                  <a href={item.external_link} target="_blank" rel="noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', flex: 1, padding: '10px', background: 'transparent', color: '#62d4e4', border: '1px solid #62d4e4', borderRadius: '6px', textDecoration: 'none', fontWeight: 'bold' }}>
-                    View source <ArrowRight size={14} />
+                  <Link to="/explore" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, padding: '8px 10px', background: '#62d4e4', color: '#06242b', borderRadius: '6px', textDecoration: 'none', fontWeight: 'bold', fontSize: '13px' }}>
+                    Explore 3D
+                  </Link>
+                  <a href={item.external_link} target="_blank" rel="noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', flex: 1, padding: '8px 10px', background: 'transparent', color: '#62d4e4', border: '1px solid #62d4e4', borderRadius: '6px', textDecoration: 'none', fontWeight: 'bold', fontSize: '13px' }}>
+                    Source <ArrowRight size={13} />
                   </a>
                 </div>
               </div>

@@ -12,7 +12,15 @@ function NumberLabel({ children }) {
 export default function Analyze() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
-  const [location, setLocation] = useState(defaultLocation);
+  const [location, setLocation] = useState(() => {
+    try {
+      const saved = localStorage.getItem('prophecy_active_location');
+      if (saved) return JSON.parse(saved);
+    } catch {
+      // ignore
+    }
+    return defaultLocation;
+  });
   const [query, setQuery] = useState('');
   const [searchState, setSearchState] = useState('idle');
   const [searchError, setSearchError] = useState('');
@@ -47,6 +55,7 @@ export default function Analyze() {
 
   const runAnalysis = () => {
     if (!property.area || Number(property.area) <= 0) return;
+    localStorage.setItem('prophecy_active_location', JSON.stringify(location));
     setStep(3);
     setAnalysisState('loading');
     

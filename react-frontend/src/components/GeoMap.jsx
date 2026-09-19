@@ -19,11 +19,27 @@ function MapViewport({ center }) {
 
 function PickableMarker({ location, onPick }) {
   useMapEvents({
-    click: (e) => onPick({ 
-      lat: e.latlng.lat, 
-      lng: e.latlng.lng, 
-      label: 'Selected map location' 
-    })
+    click: async (e) => {
+      const lat = e.latlng.lat;
+      const lng = e.latlng.lng;
+      // Immediately set coordinates
+      onPick({ lat, lng, label: 'Selected map location' });
+
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`, {
+          headers: { Accept: 'application/json' }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.display_name) {
+            const shortLabel = data.display_name.split(',').slice(0, 3).join(',');
+            onPick({ lat, lng, label: shortLabel });
+          }
+        }
+      } catch {
+        // keep initial selected location label fallback
+      }
+    }
   });
   return <Marker position={location} icon={pin} />;
 }
