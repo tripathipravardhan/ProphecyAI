@@ -35,6 +35,7 @@ export default function SpatialExplorer({ location, onFallback }) {
   const [mapMode, setMapMode] = useState('satellite');
   const demo = findDemoProperty(location.lat, location.lng);
 
+  // 1. Fetch nearby amenities whenever location coordinates change
   useEffect(() => {
     let disposed = false;
     const load = async () => {
@@ -45,13 +46,14 @@ export default function SpatialExplorer({ location, onFallback }) {
         if (!response.ok || !data.available) throw new Error('Amenity data unavailable');
         if (!disposed) setPlaces(data.places || []);
       } catch {
-        if (!disposed) setStatus('data-error');
+        if (!disposed) setPlaces([]);
       }
     };
     load();
     return () => { disposed = true; };
   }, [location.lat, location.lng]);
 
+  // 2. Initialize Cesium viewer ONCE on component mount
   useEffect(() => {
     if (!host.current) return undefined;
     let disposed = false;
@@ -59,27 +61,26 @@ export default function SpatialExplorer({ location, onFallback }) {
       try {
         const Cesium = await loadCesium();
         if (disposed) return;
-        const viewer = new Cesium.Viewer(host.current, {
-          animation: false, baseLayerPicker: false, geocoder: false, homeButton: false, infoBox: false,
-          sceneModePicker: false, selectionIndicator: false, timeline: false, navigationHelpButton: false,
-          fullscreenButton: false, terrain: undefined,
-        });
-        viewer.imageryLayers.removeAll();
-        viewer.imageryLayers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({
-          url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-        }));
-        viewer.imageryLayers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({
-          url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png',
-          subdomains: ['a', 'b', 'c', 'd']
-        }));
-        viewer.scene.globe.depthTestAgainstTerrain = false;
-        viewerRef.current = viewer;
+        
+        if (!viewerRef.current) {
+          const viewer = new Cesium.Viewer(host.current, {
+            animation: false, baseLayerPicker: false, geocoder: false, homeButton: false, infoBox: false,
+            sceneModePicker: false, selectionIndicator: false, timeline: false, navigationHelpButton: false,
+            fullscreenButton: false, terrain: undefined,
+          });
+          viewer.imageryLayers.removeAll();
+          viewer.imageryLayers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({
+            url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+          }));
+          viewer.imageryLayers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({
+            url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png',
+            subdomains: ['a', 'b', 'c', 'd']
+          }));
+          viewer.scene.globe.depthTestAgainstTerrain = false;
+          viewerRef.current = viewer;
+        }
+        
         setStatus('ready');
-        viewer.camera.flyTo({ 
-          destination: Cesium.Cartesian3.fromDegrees(location.lng, location.lat - 0.008, 1250), 
-          orientation: { heading: 0, pitch: Cesium.Math.toRadians(-42), roll: 0 }, 
-          duration: 1.4 
-        });
       } catch {
         if (!disposed) {
           setStatus('scene-error');
@@ -88,31 +89,32 @@ export default function SpatialExplorer({ location, onFallback }) {
       }
     };
     initialise();
-    return () => { disposed = true; viewerRef.current?.destroy(); viewerRef.current = null; };
-  }, [location.lat, location.lng, onFallback]);
+    return () => { 
+      disposed = true; 
+      if (viewerRef.current) {
+        viewerRef.current.destroy(); 
+        viewerRef.current = null; 
+      }
+    };
+  }, []); // Run once on mount
 
-  // Handle camera flyTo when location updates dynamically
-  useEffect(() => {
-    const Cesium = window.Cesium;
-    const viewer = viewerRef.current;
-    if (Cesium && viewer && status === 'ready') {
-      viewer.camera.flyTo({ 
-        destination: Cesium.Cartesian3.fromDegrees(location.lng, location.lat - 0.008, 1250), 
-        orientation: { heading: 0, pitch: Cesium.Math.toRadians(-42), roll: 0 }, 
-        duration: 1.2 
-      });
-    }
-  }, [location.lat, location.lng, status]);
-
+  // 3. Update Camera position & Draw entities whenever location or places change
   useEffect(() => {
     const Cesium = window.Cesium;
     const viewer = viewerRef.current;
     if (!Cesium || !viewer || status !== 'ready') return;
     
+    // Fly camera smoothly to current target location
+    viewer.camera.flyTo({ 
+      destination: Cesium.Cartesian3.fromDegrees(location.lng, location.lat - 0.008, 1250), 
+      orientation: { heading: 0, pitch: Cesium.Math.toRadians(-42), roll: 0 }, 
+      duration: 1.4 
+    });
+
     viewer.entities.removeAll();
     const propertyPosition = Cesium.Cartesian3.fromDegrees(location.lng, location.lat, 0);
     
-    // Property Digital Twin (Building context)
+    // Property Digital Twin (3D Building)
     viewer.entities.add({ 
       position: propertyPosition, 
       name: location.label, 
@@ -124,16 +126,16 @@ export default function SpatialExplorer({ location, onFallback }) {
       }, 
       label: { 
         text: location.label || (demo ? demo.name : 'SELECTED PROPERTY'), 
-        font: '600 13px sans-serif', 
+        font: 'bold 13px sans-serif', 
         fillColor: Cesium.Color.WHITE, 
         outlineColor: Cesium.Color.fromCssColorString('#06242b'), 
         outlineWidth: 4, 
         style: Cesium.LabelStyle.FILL_AND_OUTLINE, 
-        pixelOffset: new Cesium.Cartesian2(0, -60) 
+        pixelOffset: new Cesium.Cartesian2(0, -65) 
       } 
     });
     
-    // Proximity Rings
+    // Proximity Distance Rings
     const addRing = (radius, opacity) => {
       viewer.entities.add({ 
         position: propertyPosition, 
@@ -169,7 +171,7 @@ export default function SpatialExplorer({ location, onFallback }) {
       const poiPosition = Cesium.Cartesian3.fromDegrees(place.longitude, place.latitude, 2);
       const color = Cesium.Color.fromCssColorString(colors[place.type] || '#ffffff');
       
-      // POI Marker
+      // POI Marker & Connecting Line
       viewer.entities.add({ 
         position: poiPosition, 
         point: { pixelSize: 12, color, outlineColor: Cesium.Color.WHITE, outlineWidth: 2 }, 
@@ -182,7 +184,6 @@ export default function SpatialExplorer({ location, onFallback }) {
           style: Cesium.LabelStyle.FILL_AND_OUTLINE, 
           pixelOffset: new Cesium.Cartesian2(0, -25) 
         }, 
-        // Spatial Relationship Line (Animated/Dash)
         polyline: { 
           positions: [propertyPosition, poiPosition], 
           width: 2, 
@@ -194,10 +195,9 @@ export default function SpatialExplorer({ location, onFallback }) {
         } 
       });
     });
-  }, [places, filter, location, demo, status]);
+  }, [location.lat, location.lng, places, filter, status, demo]);
 
-  const displayCategories = ['All', 'Connectivity', 'Healthcare', 'Education', 'Daily Life'];
-  
+  // Handle map mode switching (Satellite / Street)
   useEffect(() => {
     const Cesium = window.Cesium;
     const viewer = viewerRef.current;
@@ -222,10 +222,15 @@ export default function SpatialExplorer({ location, onFallback }) {
 
   return (
     <section className="spatial-explorer" aria-label="3D spatial explorer" style={{ height: '100%', width: '100%', position: 'relative', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 1000, background: 'rgba(21, 27, 35, 0.9)', padding: '15px', borderRadius: '8px', border: '1px solid #27303b', width: '220px', pointerEvents: 'auto' }}>
+      <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 1000, background: 'rgba(21, 27, 35, 0.9)', padding: '15px', borderRadius: '8px', border: '1px solid #27303b', width: '240px', pointerEvents: 'auto' }}>
         <div style={{ marginBottom: '10px' }}>
           <span className="eyebrow" style={{ color: '#62d4e4', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '1px' }}>3D Spatial Web</span>
-          <b style={{ display: 'block', color: '#fff', fontSize: '14px', wordBreak: 'break-word' }}>{location.label || (demo ? demo.name : '3D building context')}</b>
+          <b style={{ display: 'block', color: '#fff', fontSize: '14px', wordBreak: 'break-word', marginTop: '2px' }}>
+            {location.label || (demo ? demo.name : 'Selected Location')}
+          </b>
+          <small style={{ color: '#62d4e4', fontSize: '11px', display: 'block', marginTop: '2px' }}>
+            {location.lat?.toFixed(4)}, {location.lng?.toFixed(4)}
+          </small>
         </div>
         
         {/* Map View Toggle */}
