@@ -1,82 +1,93 @@
-# 🔮 ProphecyAI: Advanced Real Estate & Spatial Intelligence Platform
+# 🔮 ProphecyAI — AI-Powered Property & Spatial Intelligence Platform
 
-ProphecyAI is an intelligent, full-stack real estate application that leverages machine learning and GIS satellite data to predict property prices, analyze environmental risks, and identify high-yield investment corridors. 
+![React](https://img.shields.io/badge/React-19.0-61DAFB?logo=react)
+![Vite](https://img.shields.io/badge/Vite-8.2-646CFF?logo=vite)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?logo=fastapi)
+![Python](https://img.shields.io/badge/Python-3.12+-3776AB?logo=python)
+![Leaflet](https://img.shields.io/badge/Leaflet-1.9-199900?logo=leaflet)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-## 🚀 Features
-
-*   **📊 XGBoost Price Prediction:** Real-time spatial decision tree modeling to forecast future property valuations (2028-2032) based on area, property type, and geographical coordinates.
-*   **🛰️ GIS Multispectral Satellite Analysis:** High-resolution spatial mapping utilizing Esri World Imagery to track urban heat islands, built-up growth, and vegetation indices.
-*   **🛡️ Environmental Risk Audits:** Automated compliance verification against flood zones, seismic parameters, and eco-sensitive land regulations.
-*   **🔍 Live Property Market Index:** Search real-world properties across major Indian cities and calculate forward profit projections.
-*   **💡 Investment Insights:** AI-driven trend forecasting based on upcoming transit expansions and municipal master plans.
-
----
-
-## 💻 Technology Stack
-
-### **Frontend (Client-Side)**
-*   **React.js (Vite):** Fast, component-based user interface.
-*   **React-Leaflet:** Interactive, responsive web mapping.
-*   **Recharts:** Dynamic data visualization and charting.
-*   **Lucide React:** Modern, scalable UI iconography.
-*   **CSS3 Flexbox/Grid:** Custom, fully responsive dark-mode dashboard layout.
-*   **Deployment:** Vercel
-
-### **Backend (Server-Side & API)**
-*   **Python:** Core backend processing logic.
-*   **FastAPI:** High-performance async API framework handling prediction requests.
-*   **Deployment:** Render
-
-### **Machine Learning & AI**
-*   **XGBoost (Extreme Gradient Boosting):** The core spatial decision tree model powering the price prediction engine.
-*   **Hyperparameter Tuning:** Dynamic UI controls adjusting the number of estimators (trees) and max tree depth on the fly.
-*   **Evaluation Metrics R² & MAE:** Evaluated against 14,200+ urban property benchmarks for high accuracy modeling.
-*   **Geocoding APIs:** OpenStreetMap Nominatim API for precise latitude/longitude coordinate conversion.
+ProphecyAI is an advanced, full-stack spatial property intelligence application designed for India. It integrates machine learning valuation engines, GIS satellite imagery, spatial distance web graph networks, and IS 1893 environmental risk models to provide real-time suitability scoring and forward investment projections.
 
 ---
 
-## 📸 Output Samples & Dashboard Previews
+## 🚀 Key Features
 
-Check out the dashboard in action! Below are sample screenshots of the live platform, model training studio, and spatial analysis tools.
-
-*   ![Dashboard Sample 1](./Output%20samples/Sample%201.png)
-*   ![Dashboard Sample 2](./Output%20samples/Sample%202.png)
-*   ![Dashboard Sample 3](./Output%20samples/Sample%203.png)
+*   **✨ Aceternity UI Hero Backdrop:** Animated subtle **Spotlight** radial glow and **Background Beams** ray paths strictly engineered behind the left hero section.
+*   **🛰️ High-Definition Satellite Hybrid Mapping:** Interactive Leaflet GIS maps built on Esri World Imagery combined with Carto Voyager place, village, street, and highway name overlays, equipped with a seamless **Satellite / Street** toggle.
+*   **📊 Dynamic Factor Analysis & Distance Breakdown:** Clickable factor cards (**Connectivity**, **Healthcare**, **Education**, **Daily Life**, **Environment**) that expand to show individual facility distance breakdowns (e.g. *Metro Station — 1.2 km*, *Hospital — 0.9 km*).
+*   **🛡️ IS 1893 Seismic & Hydrological Risk Engine:** Automated environmental vulnerability audits mapping locations against Bureau of Indian Standards (IS 1893:2016) seismic zones (Zones II to V) and hydrological river catchment proximity.
+*   **📈 Predictive Valuation Modeling:** Forward valuation forecasting (2028–2032 estimates) based on area, property type, and coordinate bounding boxes.
+*   **🌐 3D Spatial Explorer:** Contextual 3D web connector lines mapping amenity nodes directly to property locations.
+*   **✉️ Direct Support & Account Avatar:** Integrated Gmail web compose support button for `pravardhantripathi@gmail.com` and dynamic account initial avatar symbol badge.
 
 ---
 
-## ⚙️ Getting Started (Run Locally)
+## 📸 Output & Dashboard Samples
 
-### 1. Clone the repository
+### 1. Hero Landing Page (Spotlight & Background Beams)
+![Hero Landing Page](./Output%20samples/sample_1_hero_overview.png)
+
+### 2. Property Valuation & Investment Projections
+![Property Intelligence Report](./Output%20samples/sample_2_property_value.png)
+
+### 3. Spatial Context (Satellite Hybrid Map & Factor Analysis)
+![Spatial Context & Satellite Map](./Output%20samples/sample_3_spatial_context.png)
+
+### 4. 3D Spatial Explorer & Web Context Visualizer
+![3D Spatial Explorer](./Output%20samples/sample_4_3d_spatial_explorer.png)
+
+---
+
+## 💻 Architecture & Technology Stack
+
+### **Frontend**
+- **Framework:** React 19 + Vite 8
+- **Mapping:** Leaflet & React-Leaflet (Esri World Imagery + Carto Hybrid Overlay)
+- **Visuals & Motion:** Framer Motion (Spotlight & Background Beams), Recharts, Lucide Icons
+- **Routing:** React Router DOM 7
+
+### **Backend & Machine Learning**
+- **Framework:** Python 3.12 + FastAPI (Uvicorn async server)
+- **Spatial Analysis:** Overpass API (OpenStreetMap GIS queries), Nominatim Geocoding
+- **Risk Assessment:** Bureau of Indian Standards IS 1893:2016 Seismic Matrix & Hydrological Proximity Rules
+
+---
+
+## ⚙️ Getting Started (Local Setup)
+
+### 1. Clone the Repository
 ```bash
-git clone [https://github.com/tripathipravardhan/ProphecyAI.git](https://github.com/tripathipravardhan/ProphecyAI.git)
+git clone https://github.com/tripathipravardhan/ProphecyAI.git
 cd ProphecyAI
 ```
 
-2. Start the Frontend
-Bash
+### 2. Start the Frontend (Vite App)
+```bash
 cd react-frontend
 npm install
 npm run dev
+```
+*Access the application at `http://localhost:5173`*
 
-3. Start the Backend (FastAPI)
-Ensure you have Python installed and your virtual environment activated.
-
-Bash
+### 3. Start the Backend Engine (FastAPI)
+```bash
 cd backend
 pip install -r requirements.txt
-uvicorn main:app --reload
+python main.py
+```
+*API endpoints active at `http://127.0.0.1:8000`*
 
-🤝 Contributing
-Contributions, issues, and feature requests are welcome! Feel free to check the issues page if you want to contribute.
+---
 
-📝 License
-This project is licensed under the MIT License.
+## 🤝 Support & Contact
 
+If you have questions, feedback, or need support, feel free to reach out directly:
+- **Email:** [pravardhantripathi@gmail.com](mailto:pravardhantripathi@gmail.com?subject=ProphecyAI%20Query)
+- **GitHub:** [@tripathipravardhan](https://github.com/tripathipravardhan)
 
-### How to push this update:
-Once you have pasted this into your `README.md` in VS Code, run your final terminal commands:
-```bash
-git add README.md
-git commit -m "Update README with accurate image links and tech stack"
-git push origin main
+---
+
+## 📝 License
+
+Distributed under the MIT License.
